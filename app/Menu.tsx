@@ -1,41 +1,34 @@
-// src/screens/Home.tsx
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, ScrollView, View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
 import { Link } from 'expo-router';
-// Importa RootStackParamList desde App.tsx
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
 
 export default function Menu() {
     const [UserName, setUserName] = useState('');
 
     useEffect(() => {
         const cargarDatos = async () => {
-          try {
-            const userDataString = await AsyncStorage.getItem('user');
-            if (userDataString) {
-              const userData = JSON.parse(userDataString);
-              setUserName(userData.nombre); 
-    
+            try {
+                const userDataString = await AsyncStorage.getItem('user');
+                if (userDataString) {
+                    const userData = JSON.parse(userDataString);
+                    setUserName(userData.nombre); 
+                }
+            } catch (error) {
+                console.error("Error al cargar datos de AsyncStorage:", error);
             }
-          } catch (error) {
-            console.error("Error al cargar datos de AsyncStorage:", error);
-          }
         };
-    
         cargarDatos();
-      }, []);
+    }, []);
 
     const activateAlarm = () => {
         // Lógica para activar la alarma
     };
+
     const showSecurityTips = () => {
         Alert.alert(
             "Consejos de Seguridad",
@@ -43,16 +36,18 @@ export default function Menu() {
             [{ text: "Entendido" }]
         );
     };
+
     return (
         <ScrollView>
             <View style={styles.container}>
                 <Text style={styles.text1}>ALERTA URBANA</Text>
                 <Text style={styles.text2}>SOMOS TODOS</Text>
                 <View style={styles.welcome}>
-                    <Text style={styles.welcomeText}>BIENVENIDO {UserName.toUpperCase()}</Text>
+                    <Text style={styles.welcomeText}>Bienvenido <Text style={{ fontWeight: 'bold' }}>{UserName.toUpperCase()}</Text>,</Text>
+                    <Text style={styles.subText}>¿Tienes una emergencia?</Text>
                 </View>
-                {/* Botón SOS */}
 
+                {/* Botón SOS */}
                 <TouchableOpacity
                     style={styles.sosButton}
                     onPress={activateAlarm}
@@ -60,13 +55,9 @@ export default function Menu() {
                     <Text style={styles.sosButtonText}>SOS</Text>
                 </TouchableOpacity>
 
-
                 {/* Grid Layout (Botones de menú) */}
                 <View style={styles.menuGrid}>
-                    <TouchableOpacity
-                        style={styles.menuButton}
-                    //  onPress={() => navigation.navigate("ReportIncident")}
-                    >
+                    <TouchableOpacity style={styles.menuButton}>
                         <Link href="/Reporte">
                             <View style={styles.stackLayout}>
                                 <MaterialIcons name="report" size={60} color="red" />
@@ -74,14 +65,9 @@ export default function Menu() {
                                 <Text style={styles.menuButtonSubText}>Incidente</Text>
                             </View>
                         </Link>
-
                     </TouchableOpacity>
 
-
-                    <TouchableOpacity
-                        style={styles.menuButton}
-                    //  onPress={() => navigation.navigate("EmergencyServices")}
-                    >
+                    <TouchableOpacity style={styles.menuButton}>
                         <Link href="/Services">
                             <View style={styles.stackLayout}>
                                 <MaterialIcons name="contact-emergency" size={55} color="blue" />
@@ -91,39 +77,27 @@ export default function Menu() {
                         </Link>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={styles.menuButton}
-                    //onPress={() => navigation.navigate("Notifications")}
-                    >
+                    <TouchableOpacity style={styles.menuButton}>
                         <Link href="/RegistrarContactos">
                             <View style={styles.stackLayout}>
                                 <AntDesign name="contacts" size={60} color="purple" />
                                 <Text style={styles.menuButtonText}>Registrar</Text>
                                 <Text style={styles.menuButtonSubText}>Contactos</Text>
-
                             </View>
                         </Link>
                     </TouchableOpacity>
-
 
                     <TouchableOpacity style={styles.menuButton}>
-                        <Link href="/ChatGlobal" >
+                        <Link href="/ChatGlobal">
                             <View style={styles.stackLayout}>
                                 <FontAwesome5 name="user-friends" size={60} color="green" />
-
                                 <Text style={styles.menuButtonText}>Comunidad</Text>
-
                                 <Text style={styles.menuButtonSubText}>Nuestra</Text>
-
                             </View>
                         </Link>
                     </TouchableOpacity>
 
-
-                    <TouchableOpacity
-                        style={styles.menuButton}
-                    // onPress={showSecurityTips}
-                    >
+                    <TouchableOpacity style={styles.menuButton} onPress={showSecurityTips}>
                         <View style={styles.stackLayout}>
                             <AntDesign name="checksquare" size={60} color="#d6d900" />
                             <Text style={styles.menuButtonText}>Consejos</Text>
@@ -131,6 +105,7 @@ export default function Menu() {
                         </View>
                     </TouchableOpacity>
                 </View>
+
                 <View style={styles.footer}>
                     <TouchableOpacity style={styles.footerButton}>
                         <Ionicons name="exit-outline" size={30} color="black" />
@@ -140,7 +115,7 @@ export default function Menu() {
             </View>
         </ScrollView>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -150,69 +125,52 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         marginTop: 40,
     },
-
-    backgroundImage: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    overlay: {
-        position: 'absolute', // Permite que la capa se superponga sobre la imagen
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'white', // El color de la capa es negro
-        opacity: 0.64, // Ajusta la opacidad (0 es completamente transparente, 1 es completamente opaco)
-    },
     welcome: {
-        top: 100,
-        color: 'black'
+        alignItems: 'center',
+        marginTop: 20,
     },
     welcomeText: {
         color: 'black',
-        fontSize: 35,
+        fontSize: 24,
+    },
+    subText: {
+        color: 'grey',
+        fontSize: 16,
+        marginTop: 5,
     },
     sosButton: {
         backgroundColor: '#05079d',
         padding: 20,
-        marginTop: '40%',
-        marginBottom: '10%',
+        marginTop: '7%',
         borderRadius: 100,
-        width: 160,
-        height: 160,
+        width: 140,
+        height: 140,
         justifyContent: 'center',
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.25,
-        shadowRadius: 3.5,
-        elevation: 5,
-        borderWidth: 5,
+        shadowRadius: 8,
+        elevation: 10,
+        borderWidth: 4,
         borderColor: '#4fa8fb',
-
     },
     sosButtonText: {
-        fontSize: 30,
+        fontSize: 28,
         fontWeight: 'bold',
         color: '#fff',
     },
-    footer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 20,
+    text1: {
+        fontSize: 35,
+        fontWeight: 'bold',
+        marginTop: 80,
+        color: '#025d84',
     },
-    footerButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    menuButtonExit: {
-        color: 'black',
-        fontSize: 16,
-        marginLeft: 10, // espacio entre el icono y el texto
-
+    text2: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 40,
+        color: '#025d84',
     },
     menuGrid: {
         flexDirection: 'row',
@@ -221,9 +179,7 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 20,
     },
-
     menuButton: {
-        // estilos para el botón
         backgroundColor: 'white',
         width: '44%',
         height: 160,
@@ -238,7 +194,7 @@ const styles = StyleSheet.create({
         elevation: 8,
     },
     stackLayout: {
-        flexDirection: 'column', // apilar icono y textos verticalmente
+        flexDirection: 'column',
         alignItems: 'center',
     },
     menuButtonText: {
@@ -250,12 +206,18 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: 'grey',
     },
-    text1: {
-        fontSize: 30,
+    footer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20,
+    },
+    footerButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    menuButtonExit: {
         color: 'black',
-        fontWeight: 'bold',
-        marginTop: 40,
+        fontSize: 16,
+        marginLeft: 10,
     },
 });
-
-
