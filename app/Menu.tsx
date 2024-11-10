@@ -87,7 +87,7 @@ export default function Menu() {
 
 
                         <TouchableOpacity style={styles.menuButton}>
-                            <Link href="/Comunity" >
+                            <Link href="/ChatGlobal" >
                                 <View style={styles.stackLayout}>
                                     <FontAwesome5 name="user-friends" size={60} color="green" />
 
