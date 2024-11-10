@@ -84,7 +84,7 @@ export default function Login() {
 
       {/* Botón SOS debajo del formulario de login */}
       <TouchableOpacity style={styles.sosButton}>
-        <Link href={{ pathname: '/Menu' }} style={styles.button}>
+        <Link href="/Menu" style={styles.button}>
           <Text style={styles.sosButtonText}>SOS</Text>
         </Link>
       </TouchableOpacity>
