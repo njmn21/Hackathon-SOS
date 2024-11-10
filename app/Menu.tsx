@@ -8,6 +8,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 // Importa RootStackParamList desde App.tsx
 
 
@@ -16,6 +18,24 @@ import { Link } from 'expo-router';
 export default function Menu() {
 
     const [UserName, setUserName] = useState('');
+
+    useEffect(() => {
+        const cargarDatos = async () => {
+          try {
+            const userDataString = await AsyncStorage.getItem('user');
+            if (userDataString) {
+              const userData = JSON.parse(userDataString);
+              setUserName(userData.nombre); 
+    
+            }
+          } catch (error) {
+            console.error("Error al cargar datos de AsyncStorage:", error);
+          }
+        };
+    
+        cargarDatos();
+      }, []);
+
 
     const phoneNumber = '+51955467648';
 
@@ -270,17 +290,17 @@ const styles = StyleSheet.create({
     text1: {
         fontSize: 30,
         fontWeight: 'bold',
-        color: 'black',
         marginTop: 90,
         marginLeft: 10,
         textAlign: 'center',
+        color: '#024c66',
     },
     text2: {
         fontSize: 20,
-        color: 'black',
         marginLeft: 10,
         fontWeight: 'bold',
         textAlign: 'center',
+        color: '#024c66'
     },
 });
 
