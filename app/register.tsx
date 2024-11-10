@@ -20,7 +20,6 @@ export default function Register() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',  // Asegúrate de que se espere JSON en la respuesta
         },
         body: JSON.stringify({
           nombre: name,
@@ -31,7 +30,6 @@ export default function Register() {
           direccion: address,
         }),
       });
-      
 
       const data = await response.json();
 
@@ -70,7 +68,7 @@ export default function Register() {
 
       <TextInput
         style={[styles.input, { borderColor: Colors[colorScheme].tint }]}
-        placeholder="Correo electrónico"
+        placeholder="Correo kelectrónico"
         placeholderTextColor={colorScheme === 'light' ? '#888' : '#aaa'}
         value={email}
         onChangeText={setEmail}

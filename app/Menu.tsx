@@ -1,5 +1,5 @@
 // src/screens/Home.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ImageBackground, ScrollView, View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -14,6 +14,8 @@ import { Link } from 'expo-router';
 
 
 export default function Menu() {
+
+    const [UserName, setUserName] = useState('');
 
     const activateAlarm = () => {
         // Lógica para activar la alarma
@@ -34,7 +36,7 @@ export default function Menu() {
                 >
                     <View style={styles.overlay}></View>
                     <View style={styles.welcome}>
-                        <Text style={styles.welcomeText}>BIENVENIDO JUANITO</Text>
+                        <Text style={styles.welcomeText}>BIENVENIDO {UserName.toUpperCase()}</Text>
                     </View>
                     {/* Botón SOS */}
 
@@ -52,11 +54,14 @@ export default function Menu() {
                             style={styles.menuButton}
                         //  onPress={() => navigation.navigate("ReportIncident")}
                         >
+                            <Link href="/Reporte">
                             <View style={styles.stackLayout}>
                                 <MaterialIcons name="report" size={60} color="red" />
                                 <Text style={styles.menuButtonText}>Reportar</Text>
                                 <Text style={styles.menuButtonSubText}>Incidente</Text>
                             </View>
+                            </Link>
+                            
                         </TouchableOpacity>
 
 
@@ -64,26 +69,28 @@ export default function Menu() {
                             style={styles.menuButton}
                         //  onPress={() => navigation.navigate("EmergencyServices")}
                         >
+                              <Link href="/Services">
                             <View style={styles.stackLayout}>
                                 <MaterialIcons name="contact-emergency" size={55} color="blue" />
                                 <Text style={styles.menuButtonText}>Servicios</Text>
                                 <Text style={styles.menuButtonSubText}>Emergencia</Text>
                             </View>
+                            </Link>
                         </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={styles.menuButton}
-                    //onPress={() => navigation.navigate("Notifications")}
-                    >
-                        <Link href="/RegistrarContactos">
-                            <View style={styles.stackLayout}>
-                                <AntDesign name="contacts" size={60} color="purple" />
-                                <Text style={styles.menuButtonText}>Registrar</Text>
-                                <Text style={styles.menuButtonSubText}>Contactos</Text>
+                        <TouchableOpacity
+                            style={styles.menuButton}
+                        //onPress={() => navigation.navigate("Notifications")}
+                        >
+                            <Link href="/RegistrarContactos">
+                                <View style={styles.stackLayout}>
+                                    <AntDesign name="contacts" size={60} color="purple" />
+                                    <Text style={styles.menuButtonText}>Registrar</Text>
+                                    <Text style={styles.menuButtonSubText}>Contactos</Text>
 
-                            </View>
-                        </Link>
-                    </TouchableOpacity>
+                                </View>
+                            </Link>
+                        </TouchableOpacity>
 
 
                         <TouchableOpacity style={styles.menuButton}>
@@ -99,23 +106,6 @@ export default function Menu() {
                             </Link>
                         </TouchableOpacity>
 
-
-
-                       
-
-                        <TouchableOpacity
-                            style={styles.menuButton}
-                        // onPress={() => navigation.navigate("UserLocation")}
-                        >
-                            <Link href="/Ubication" >
-                                <View style={styles.stackLayout}>
-                                    <Entypo name="location-pin" size={60} color="orange" />
-
-                                    <Text style={styles.menuButtonText}>Mi Ubicación</Text>
-                                    <Text style={styles.menuButtonSubText}>de alerta</Text>
-                                </View>
-                            </Link>
-                        </TouchableOpacity>
 
                         <TouchableOpacity
                             style={styles.menuButton}
@@ -169,7 +159,7 @@ const styles = StyleSheet.create({
     },
     welcomeText: {
         color: 'white',
-        fontSize: 50,
+        fontSize: 40,
     },
     sosButton: {
         backgroundColor: '#05079d',
