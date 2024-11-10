@@ -1,5 +1,5 @@
 // src/screens/Home.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ImageBackground, ScrollView, View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -14,6 +14,16 @@ import { Link } from 'expo-router';
 
 
 export default function Menu() {
+
+    const [UserName, setUserName] = useState('');
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        if(user && user.nombre) {
+            setUserName(user.nombre);
+        }
+    } , []);
+
 
     const activateAlarm = () => {
         // Lógica para activar la alarma
@@ -34,7 +44,7 @@ export default function Menu() {
                 >
                     <View style={styles.overlay}></View>
                     <View style={styles.welcome}>
-                        <Text style={styles.welcomeText}>BIENVENIDO JUANITO</Text>
+                        <Text style={styles.welcomeText}>BIENVENIDO {UserName.toUpperCase()}</Text>
                     </View>
                     {/* Botón SOS */}
 
@@ -90,7 +100,7 @@ export default function Menu() {
 
 
                         <TouchableOpacity style={styles.menuButton}>
-                            <Link href="/Comunity" >
+                            <Link href="/ChatGlobal" >
                                 <View style={styles.stackLayout}>
                                     <FontAwesome5 name="user-friends" size={60} color="green" />
 
@@ -168,7 +178,7 @@ const styles = StyleSheet.create({
     },
     welcomeText: {
         color: 'white',
-        fontSize: 50,
+        fontSize: 40,
     },
     sosButton: {
         backgroundColor: '#05079d',
