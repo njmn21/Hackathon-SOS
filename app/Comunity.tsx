@@ -1,22 +1,33 @@
-// src/screens/Home.tsx
-import React from 'react';
-import { ImageBackground, View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import Entypo from '@expo/vector-icons/Entypo';
-import Ionicons from '@expo/vector-icons/Ionicons';
-
 import { Link } from 'expo-router';
-// Importa RootStackParamList desde App.tsx
+import React from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { Alert } from 'react-native';
 
+type Chat = {
+    id: string;
+    name: string;
+    lastMessage: string;
+};
 
+const chats: Chat[] = [
+    { id: '1', name: 'Vecino 1', lastMessage: 'Hola, ¿cómo estás?' },
+    { id: '2', name: 'Vecino 2', lastMessage: '¿Viste las noticias?' },
+    { id: '3', name: 'Vecino 3', lastMessage: 'Reunión mañana a las 5 PM' },
+    { id: '4', name: 'Vecino 4', lastMessage: 'Gracias por la ayuda' },
+];
+
+const ChatItem: React.FC<Chat> = ({ name, lastMessage }) => (
+    <TouchableOpacity style={styles.chatItem}>
+        <Text style={styles.chatName}>{name}</Text>
+        <Text style={styles.chatMessage}>{lastMessage}</Text>
+    </TouchableOpacity>
+);
 
 export default function HomeScreen() {
-
     const activateAlarm = () => {
         // Lógica para activar la alarma
     };
+
     const showSecurityTips = () => {
         Alert.alert(
             "Consejos de Seguridad",
@@ -24,19 +35,37 @@ export default function HomeScreen() {
             [{ text: "Entendido" }]
         );
     };
+
     return (
         <View style={styles.container}>
-            
+            <Link href="/chat/id">
+                <FlatList
+                    data={chats}
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => <ChatItem {...item} />}
+                />
+            </Link>
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center',
         flex: 1,
+        padding: 20,
+        backgroundColor: '#fff',
     },
-
+    chatItem: {
+        padding: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    chatName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    chatMessage: {
+        fontSize: 16,
+        color: 'gray',
+    },
 });
-
-
