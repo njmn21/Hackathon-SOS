@@ -16,7 +16,7 @@ export default function Register() {
 
   const handleRegister = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/usuarios', {
+      const response = await fetch('https://newback-sr47.onrender.com/api/usuarios', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
