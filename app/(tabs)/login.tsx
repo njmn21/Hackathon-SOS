@@ -80,13 +80,6 @@ export default function Login() {
 
 
       </View>
-
-      {/* Botón SOS debajo del formulario de login */}
-      <TouchableOpacity style={styles.sosButton}>
-        <Link href="/Menu" style={styles.button}>
-          <Text style={styles.sosButtonText}>SOS</Text>
-        </Link>
-      </TouchableOpacity>
     </View>
   );
 }
