@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, ActivityIndicator, ScrollView, Modal } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
@@ -6,6 +6,8 @@ import { Audio } from 'expo-av';
 import { MaterialIcons } from '@expo/vector-icons';
 import Ubication from './Ubication';
 import MapView, { Marker } from 'react-native-maps';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 // Hook para manejar permisos
 const usePermission = (requestPermission: Function, permissionType: string) => {
     const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -22,7 +24,6 @@ const usePermission = (requestPermission: Function, permissionType: string) => {
 };
 
 export default function ReportIncident() {
-    const [description, setDescription] = useState<string>("");
     const [images, setImages] = useState<any[]>([]);
     const [audioRecording, setAudioRecording] = useState<Audio.Recording | null>(null); const [isLoading, setIsLoading] = useState(false);
     const [alertMessages, setAlertMessages] = useState<string[]>([]); // Historial de alertas
@@ -30,7 +31,70 @@ export default function ReportIncident() {
     const [submittedData, setSubmittedData] = useState<any>(null); // Para guardar los datos del reporte enviado
     const [location, setLocation] = useState<Location.LocationObject | null>(null);
     const [selectedLocation, setSelectedLocation] = useState<Location.LocationObject | null>(null);
+    const [grupoId, setGrupoId] = useState<number | null>(null);
+    const [usuarioId, setUsuarioId] = useState<number | null>(null);
+    const  [ubicacionURL,setUbicacionURL]=useState<String>( "");
+    const [description, setDescription] = useState<string>("");
+    useEffect(() => {
+        const cargarDatos = async () => {
+            try {
+                const userDataString = await AsyncStorage.getItem('user');
+                if (userDataString) {
+                    const userData = JSON.parse(userDataString);
+                    const grupoIdStorage = userData.id_group;
+                    const usuarioIdStorage = userData.id;
 
+                    if (grupoIdStorage && usuarioIdStorage) {
+                        setGrupoId(grupoIdStorage);
+                        setUsuarioId(usuarioIdStorage);
+                    }
+                }
+            } catch (error) {
+                console.error("Error al cargar datos de AsyncStorage:", error);
+            }
+        };
+
+        cargarDatos();
+    }, []);
+
+    const enviarAlerta = async () => {
+        console.log("grupo "+grupoId+ "   usuario "+usuarioId + " ubicacion "+ubicacionURL+" descripcion  "+description);
+        if (grupoId && usuarioId && ubicacionURL && description) {
+            const url = `https://newback-sr47.onrender.com/api/alertas/crear?grupoId=${grupoId}&usuarioId=${usuarioId}&ubicacion=${ubicacionURL}&descripcion=${description}`;
+    
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                });
+    
+                // Check if the response is JSON
+                const contentType = response.headers.get("content-type");
+    
+                if (!response.ok) {
+                    throw new Error(`Error en la respuesta: ${response.statusText}`);
+                }
+    
+                // Log the response body for debugging
+                const textResponse = await response.text();
+                console.log('Respuesta del servidor:', textResponse);
+    
+                // Check if the response is JSON
+                if (contentType && contentType.includes('application/json')) {
+                    const data = JSON.parse(textResponse);
+                    console.log('Alerta enviada exitosamente:', data);
+                } else {
+                    // Handle non-JSON responses, such as plain text or HTML
+                    console.warn("La respuesta no es JSON, es posible que el servidor esté enviando un mensaje de error en texto plano.");
+                }
+            } catch (error) {
+                console.error('Error al enviar la alerta:', error);
+            }
+        } else {
+            console.log("Por favor, complete todos los campos antes de enviar la alerta.");
+        }
+    };
+    
+      
     // Permisos
     const [cameraPermission, requestCameraPermission] = usePermission(ImagePicker.requestCameraPermissionsAsync, "Cámara");
     const [locationPermission, requestLocationPermission] = usePermission(Location.requestForegroundPermissionsAsync, "Ubicación");
@@ -53,6 +117,7 @@ export default function ReportIncident() {
         if (selectedLocation) {
             const { latitude, longitude } = selectedLocation.coords;
             const message = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+            setUbicacionURL(message);
             setAlertMessages([...alertMessages, `Ubicación seleccionada capturada. ${message}`]); // Añadir mensaje de alerta
 
             // Aquí puedes hacer la lógica para enviar el reporte, ejemplo con fetch
@@ -201,6 +266,10 @@ export default function ReportIncident() {
     const closeDetails = () => {
         setShowDetails(false); // Cerrar el modal
     };
+    const handlePress = () => {
+        submitReport();
+        enviarAlerta();
+        };
 
     return (
         <ScrollView>
@@ -315,7 +384,6 @@ export default function ReportIncident() {
 
                 </View>
 
-                {/* Campo de descripción */}
                 <TextInput
                     style={styles.input}
                     placeholder="Ingrese una descripción"
@@ -323,14 +391,15 @@ export default function ReportIncident() {
                     onChangeText={setDescription}
                     multiline
                 />
+  
+                
 
-                {/* Botón de envío */}
-                <TouchableOpacity style={styles.submitButton} onPress={submitReport}>
-                    {isLoading ? (
-                        <ActivityIndicator size="small" color="#fff" />
-                    ) : (
-                        <Text style={styles.submitButtonText}>Enviar</Text>
-                    )}
+                <TouchableOpacity style={styles.submitButton} onPress={handlePress}>
+                {isLoading ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                    <Text style={styles.submitButtonText}>Enviar</Text>
+                )}
                 </TouchableOpacity>
 
                 {/* Historial de alertas */}
