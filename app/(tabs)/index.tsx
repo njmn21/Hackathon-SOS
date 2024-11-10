@@ -1,70 +1,176 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+// src/screens/Home.tsx
+import React from 'react';
+import { ImageBackground, View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+// Importa RootStackParamList desde App.tsx
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+
 
 export default function HomeScreen() {
+
+  const activateAlarm = () => {
+    // Lógica para activar la alarma
+  };
+  const showSecurityTips = () => {
+    Alert.alert(
+      "Consejos de Seguridad",
+      "• Mantén las puertas y ventanas cerradas\n• Conoce a tus vecinos\n• Ten a mano números de emergencia\n• Mantén iluminado el exterior de tu casa",
+      [{ text: "Entendido" }]
+    );
+  };
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={styles.container}>
+      <ImageBackground
+        source={require('@/assets/images/mp.png')}
+        style={styles.backgroundImage}
+      >
+        <View style={styles.overlay}></View>
+
+      {/* Botón SOS */}
+      <TouchableOpacity
+        style={styles.sosButton}
+        onPress={activateAlarm}
+      >
+        <Text style={styles.sosButtonText}>SOS</Text>
+      </TouchableOpacity>
+
+      {/* Grid Layout (Botones de menú) */}
+      <View style={styles.menuGrid}>
+        <TouchableOpacity
+          style={styles.menuButton}
+        //  onPress={() => navigation.navigate("ReportIncident")}
+        >
+          <View style={styles.stackLayout}>
+            <Text style={styles.menuButtonText}>Reportarr</Text>
+            <Text style={styles.menuButtonSubText}>Incidente</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuButton}
+        //  onPress={() => navigation.navigate("EmergencyServices")}
+        >
+          <View style={styles.stackLayout}>
+            <Text style={styles.menuButtonText}>Servicios</Text>
+            <Text style={styles.menuButtonSubText}>Emergencia</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuButton}
+        // onPress={() => navigation.navigate("Community")}
+        >
+          <View style={styles.stackLayout}>
+            <Text style={styles.menuButtonText}>Comunidad</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuButton}
+        //onPress={() => navigation.navigate("Notifications")}
+        >
+          <View style={styles.stackLayout}>
+            <Text style={styles.menuButtonText}>Notificaciones</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuButton}
+        // onPress={() => navigation.navigate("UserLocation")}
+        >
+          <View style={styles.stackLayout}>
+            <Text style={styles.menuButtonText}>Mi Ubicación</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuButton}
+        // onPress={showSecurityTips}
+        >
+          <View style={styles.stackLayout}>
+            <Text style={styles.menuButtonText}>Consejos</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      
+      </ImageBackground>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  container: {
+    justifyContent: 'center',
+    flex: 1,  
+  },
+
+  backgroundImage: {
+    flex: 1,
+    width: '100%', 
+    height: '100%', 
+    justifyContent: 'center', 
     alignItems: 'center',
-    gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
+  overlay: {
+    position: 'absolute', // Permite que la capa se superponga sobre la imagen
+    top: 0,
     left: 0,
-    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'black', // El color de la capa es negro
+    opacity: 0.64, // Ajusta la opacidad (0 es completamente transparente, 1 es completamente opaco)
+  },
+  sosButton: {
+    backgroundColor: '#7f0000',
+    padding: 20,
+    borderRadius: 100,
+    width: 160,
+    height: 160,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.5,
+    elevation: 5,
+    
+  },
+  sosButtonText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  menuGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginTop: 20,
+  },
+  menuButton: {
+    backgroundColor: '#bd0003',
+    width:160,
+    height:100,
+    margin: 10,
+    padding: 14,
+    borderRadius: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.5,
+    elevation: 8,
+  },
+  stackLayout: {
+    alignItems: 'center',
+  },
+  menuButtonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  menuButtonSubText: {
+    fontSize: 12,
+    color: '#fff',
   },
 });
+
+
