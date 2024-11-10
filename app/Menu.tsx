@@ -9,13 +9,29 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { Link } from 'expo-router';
 // Importa RootStackParamList desde App.tsx
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 export default function Menu() {
-
     const [UserName, setUserName] = useState('');
+
+    useEffect(() => {
+        const cargarDatos = async () => {
+          try {
+            const userDataString = await AsyncStorage.getItem('user');
+            if (userDataString) {
+              const userData = JSON.parse(userDataString);
+              setUserName(userData.nombre); 
+    
+            }
+          } catch (error) {
+            console.error("Error al cargar datos de AsyncStorage:", error);
+          }
+        };
+    
+        cargarDatos();
+      }, []);
 
     const activateAlarm = () => {
         // Lógica para activar la alarma
