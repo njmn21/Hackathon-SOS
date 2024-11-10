@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image, ActivityIndicator, ScrollView, Modal } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import { Audio } from 'expo-av';
 import { MaterialIcons } from '@expo/vector-icons';
-import Ubication from './Ubication';
 import MapView, { Marker } from 'react-native-maps';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 // Hook para manejar permisos
 const usePermission = (requestPermission: Function, permissionType: string) => {
     const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -22,7 +23,6 @@ const usePermission = (requestPermission: Function, permissionType: string) => {
 };
 
 export default function ReportIncident() {
-    const [description, setDescription] = useState<string>("");
     const [images, setImages] = useState<any[]>([]);
     const [audioRecording, setAudioRecording] = useState<Audio.Recording | null>(null); const [isLoading, setIsLoading] = useState(false);
     const [alertMessages, setAlertMessages] = useState<string[]>([]); // Historial de alertas
@@ -30,6 +30,80 @@ export default function ReportIncident() {
     const [submittedData, setSubmittedData] = useState<any>(null); // Para guardar los datos del reporte enviado
     const [location, setLocation] = useState<Location.LocationObject | null>(null);
     const [selectedLocation, setSelectedLocation] = useState<Location.LocationObject | null>(null);
+    const [grupoId, setGrupoId] = useState<number | null>(null);
+    const [usuarioId, setUsuarioId] = useState<number | null>(null);
+    const [ubicacionURL, setUbicacionURL] = useState<String>("");
+    const [description, setDescription] = useState<string>("");
+    useEffect(() => {
+        const cargarDatos = async () => {
+            try {
+                const userDataString = await AsyncStorage.getItem('user');
+                if (userDataString) {
+                    const userData = JSON.parse(userDataString);
+                    const grupoIdStorage = userData.id_group;
+                    const usuarioIdStorage = userData.id;
+
+                    if (grupoIdStorage && usuarioIdStorage) {
+                        setGrupoId(grupoIdStorage);
+                        setUsuarioId(usuarioIdStorage);
+                    }
+                }
+            } catch (error) {
+                console.error("Error al cargar datos de AsyncStorage:", error);
+            }
+        };
+
+        cargarDatos();
+    }, []);
+
+    const enviarAlerta = async () => {
+        console.log("grupo " + grupoId + "   usuario " + usuarioId + " ubicacion ::: " + ubicacionURL + " descripcion  " + description);
+        if (grupoId && usuarioId && ubicacionURL && description) {
+            // Codificar la URL del parámetro 'ubicacion' para manejar caracteres especiales
+            const encodedUbicacion = encodeURIComponent(ubicacionURL);
+
+            console.log(":::>>>  " + encodedUbicacion);
+            const url = `https://newback-sr47.onrender.com/api/alertas/crear?grupoId=${grupoId}&usuarioId=${usuarioId}&ubicacion=${encodedUbicacion}&descripcion=${description}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                });
+
+                // Verificar si la respuesta es JSON
+                const contentType = response.headers.get("content-type");
+
+                if (!response.ok) {
+                    throw new Error(`Error en la respuesta: ${response.statusText}`);
+                }
+
+                // Registrar el cuerpo de la respuesta para depuración
+                const textResponse = await response.text();
+                console.log('Respuesta del servidor:', textResponse);
+
+                // Verificar si la respuesta es JSON
+                if (contentType && contentType.includes('application/json')) {
+                    const data = JSON.parse(textResponse);
+                    console.log('Alerta enviada exitosamente:', data);
+
+                    // Mostrar un mensaje de éxito al usuario
+                    Alert.alert('Alerta Enviada', 'La alerta ha sido enviada correctamente.', [
+                        { text: 'OK', onPress: () => console.log('Alert Closed') }
+                    ]);
+                }
+            } catch (error) {
+                console.error('Error al enviar la alerta:', error);
+                // Mostrar un mensaje de error al usuario
+                Alert.alert('Error', 'Ocurrió un error al enviar la alerta. Inténtalo de nuevo.');
+            }
+        } else {
+            console.log("Por favor, complete todos los campos antes de enviar la alerta.");
+            // Mostrar un mensaje de advertencia si faltan campos
+            Alert.alert('Campos Incompletos', 'Por favor complete todos los campos antes de enviar la alerta.');
+        }
+    };
+
+
 
     // Permisos
     const [cameraPermission, requestCameraPermission] = usePermission(ImagePicker.requestCameraPermissionsAsync, "Cámara");
@@ -53,30 +127,8 @@ export default function ReportIncident() {
         if (selectedLocation) {
             const { latitude, longitude } = selectedLocation.coords;
             const message = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+            setUbicacionURL(message);
             setAlertMessages([...alertMessages, `Ubicación seleccionada capturada. ${message}`]); // Añadir mensaje de alerta
-
-            // Aquí puedes hacer la lógica para enviar el reporte, ejemplo con fetch
-            /*
-            fetch('https://tu-servidor.com/report', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                latitude,
-                longitude,
-                message,
-              }),
-            })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log('Reporte enviado exitosamente:', data);
-            })
-            .catch((error) => {
-              console.error('Error al enviar el reporte:', error);
-              alert('Hubo un error al enviar el reporte.');
-            });
-            */
         } else {
             alert('Por favor selecciona una ubicación en el mapa.');
         }
@@ -101,7 +153,6 @@ export default function ReportIncident() {
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
     }
-
 
     // Función para abrir la galería de imágenes
     const pickImage = async () => {
@@ -201,173 +252,180 @@ export default function ReportIncident() {
     const closeDetails = () => {
         setShowDetails(false); // Cerrar el modal
     };
+    const handlePress = () => {
+        submitReport();
+        enviarAlerta();
+    };
 
     return (
         <ScrollView>
-            <View style={styles.container}>
-                <Text style={styles.title}>¿Sucedió algo?</Text>
-                <Text style={{ fontSize: 20, textAlign: 'center' }}>Reportalo!!!</Text>
-                {/* Sección de imágenes seleccionadas */}
-                <View style={styles.imageContainer}>
-                    {images.length === 0 ? (
-                        <Text>No se han seleccionado imágenes.</Text>
-                    ) : (
-                        images.map((img, index) => (
-                            <View key={index} style={styles.imageWrapper}>
-                                <Image
-                                    source={{ uri: img.uri }}
-                                    style={styles.image}
-                                    resizeMode="contain" // Mantener la proporción de la imagen dentro del marco
-                                />
-                                <TouchableOpacity
-                                    style={styles.removeButton}
-                                    onPress={() => removeImage(index)}
-                                >
-                                    <MaterialIcons name="delete" size={20} color="#fff" />
-                                </TouchableOpacity>
-                            </View>
-                        ))
-                    )}
-                </View>
-                <View style={styles.ubicationContent} >
-                    <TouchableOpacity
-                        style={{
-                            height: 50,
-                            backgroundColor: 'green',
-                            marginTop: 3,
-                            marginBottom: 3,
-                            width: 180,
-                            padding: 7,
-                            borderRadius: 10,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }} onPress={openMap}>
-                        <Text style={styles.buttonText}>Mostrar mapa</Text>
-                    </TouchableOpacity>
-                    <View style={{ flex: 1 }}>
-                        {location ? (
-                            <MapView
-                                style={{ flex: 1 }}
-                                initialRegion={{
-                                    latitude: location.coords.latitude,
-                                    longitude: location.coords.longitude,
-                                    latitudeDelta: 0.0922,
-                                    longitudeDelta: 0.0421,
-                                }}
-                                onPress={handleMapPress} // Captura la selección en el mapa
-                            >
-                                {/* Marcador de la ubicación actual */}
-                                <Marker
-                                    coordinate={{
-                                        latitude: location.coords.latitude,
-                                        longitude: location.coords.longitude,
-                                    }}
-                                    title="Ubicación actual"
-                                    pinColor="blue" // Color para la ubicación actual
-                                />
+            <View style={styles.containerGeneral}>
 
-                                {/* Marcador de la ubicación seleccionada */}
-                                {selectedLocation && (
-                                    <Marker
-                                        coordinate={{
-                                            latitude: selectedLocation.coords.latitude,
-                                            longitude: selectedLocation.coords.longitude,
-                                        }}
-                                        title="Ubicación seleccionada"
-                                        pinColor="red" // Color para la ubicación seleccionada
-                                    />
-                                )}
-                            </MapView>
+                <View style={styles.container}>
+                    <Text style={styles.title}>¿Sucedió algo?</Text>
+                    <Text style={{ fontSize: 20, textAlign: 'center' }}>Reportalo!!!</Text>
+                    {/* Sección de imágenes seleccionadas */}
+                    <View style={styles.imageContainer}>
+                        {images.length === 0 ? (
+                            <Text>No se han seleccionado imágenes.</Text>
                         ) : (
-                            <Text>Loading map...</Text>
-                        )}
-
-                        <View style={styles.buttonContent}>
-                            <TouchableOpacity style={styles.button} onPress={handleSendReport}>
-                                <Text style={styles.buttonText}>Ubicación seleccionada</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.button1} onPress={handleLocation}>
-                                <Text style={styles.buttonText}>Ubicación actual</Text>
-                            </TouchableOpacity>
-
-                        </View>
-
-                    </View>
-
-                </View>
-
-                {/* Botones de multimedia */}
-                <View style={styles.mediaButtons}>
-
-                    <TouchableOpacity onPress={takePhoto} style={styles.iconContainer}>
-                        <MaterialIcons name="camera-alt" size={30} color="#000" />
-                        <Text>Cámara</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={pickImage} style={styles.iconContainer}>
-                        <MaterialIcons name="folder" size={30} color="#000" />
-                        <Text>Galería</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={audioRecording ? stopRecording : startRecording} style={styles.iconContainer}>
-                        <MaterialIcons name={audioRecording ? "stop" : "mic"} size={30} color="#000" />
-                        <Text>{audioRecording ? 'Detener Audio' : 'Grabar Audio'}</Text>
-                    </TouchableOpacity>
-
-
-                </View>
-
-                {/* Campo de descripción */}
-                <TextInput
-                    style={styles.input}
-                    placeholder="Ingrese una descripción"
-                    value={description}
-                    onChangeText={setDescription}
-                    multiline
-                />
-
-                {/* Botón de envío */}
-                <TouchableOpacity style={styles.submitButton} onPress={submitReport}>
-                    {isLoading ? (
-                        <ActivityIndicator size="small" color="#fff" />
-                    ) : (
-                        <Text style={styles.submitButtonText}>Enviar</Text>
-                    )}
-                </TouchableOpacity>
-
-                {/* Historial de alertas */}
-                <View style={styles.alertContainer}>
-                    {alertMessages.length > 0 && (
-                        <ScrollView style={styles.alertHistory}>
-                            {alertMessages.map((message, index) => (
-                                <View key={index} style={styles.alertItem}>
-                                    <Text style={styles.alertText}>{message}</Text>
-                                    <TouchableOpacity onPress={viewDetails} style={styles.viewDetailsButton}>
-                                        <MaterialIcons name="visibility" size={20} color="#0066CC" />
+                            images.map((img, index) => (
+                                <View key={index} style={styles.imageWrapper}>
+                                    <Image
+                                        source={{ uri: img.uri }}
+                                        style={styles.image}
+                                        resizeMode="contain" // Mantener la proporción de la imagen dentro del marco
+                                    />
+                                    <TouchableOpacity
+                                        style={styles.removeButton}
+                                        onPress={() => removeImage(index)}
+                                    >
+                                        <MaterialIcons name="delete" size={20} color="#fff" />
                                     </TouchableOpacity>
                                 </View>
-                            ))}
-                        </ScrollView>
-                    )}
-                </View>
-
-                {/* Modal para ver los detalles */}
-                <Modal
-                    visible={showDetails}
-                    transparent={true}
-                    animationType="slide"
-                    onRequestClose={closeDetails}
-                >
-                    <View style={styles.modalOverlay}>
-                        <View style={styles.modalContent}>
-                            <Text style={styles.modalTitle}>Detalles del Reporte</Text>
-                            <Text>Descripción: {submittedData?.description}</Text>
-                            <Text>Ubicación: {submittedData?.location ? `${submittedData.location.coords.latitude}, ${submittedData.location.coords.longitude}` : 'No disponible'}</Text>
-                            <Text>Imágenes: {submittedData?.images.length}</Text>
-                            <TouchableOpacity onPress={closeDetails} style={styles.modalButton}>
-                                <Text style={styles.modalButtonText}>Cerrar</Text>
-                            </TouchableOpacity>
-                        </View>
+                            ))
+                        )}
                     </View>
-                </Modal>
+                    <View style={styles.ubicationContent} >
+                        <TouchableOpacity
+                            style={{
+                                height: 60,
+                                backgroundColor: 'green',
+                                marginTop: 3,
+                                marginBottom: 3,
+                                width: 180,
+                                padding: 7,
+                                borderRadius: 10,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }} onPress={openMap}>
+                            <Text style={styles.buttonText}>Mostrar mapa</Text>
+                        </TouchableOpacity>
+                        <View style={{ flex: 1 }}>
+                            {location ? (
+                                <MapView
+                                    style={{ flex: 1 }}
+                                    initialRegion={{
+                                        latitude: location.coords.latitude,
+                                        longitude: location.coords.longitude,
+                                        latitudeDelta: 0.0922,
+                                        longitudeDelta: 0.0421,
+                                    }}
+                                    onPress={handleMapPress} // Captura la selección en el mapa
+                                >
+                                    {/* Marcador de la ubicación actual */}
+                                    <Marker
+                                        coordinate={{
+                                            latitude: location.coords.latitude,
+                                            longitude: location.coords.longitude,
+                                        }}
+                                        title="Ubicación actual"
+                                        pinColor="blue" // Color para la ubicación actual
+                                    />
+
+                                    {/* Marcador de la ubicación seleccionada */}
+                                    {selectedLocation && (
+                                        <Marker
+                                            coordinate={{
+                                                latitude: selectedLocation.coords.latitude,
+                                                longitude: selectedLocation.coords.longitude,
+                                            }}
+                                            title="Ubicación seleccionada"
+                                            pinColor="red" // Color para la ubicación seleccionada
+                                        />
+                                    )}
+                                </MapView>
+                            ) : (
+                                <Text>Loading map...</Text>
+                            )}
+
+                            <View style={styles.buttonContent}>
+                                <TouchableOpacity style={styles.button} onPress={handleSendReport}>
+                                    <Text style={styles.buttonText}>Ubicación seleccionada</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.button1} onPress={handleLocation}>
+                                    <Text style={styles.buttonText}>Ubicación actual</Text>
+                                </TouchableOpacity>
+
+                            </View>
+
+                        </View>
+
+                    </View>
+
+                    {/* Botones de multimedia */}
+                    <View style={styles.mediaButtons}>
+
+                        <TouchableOpacity onPress={takePhoto} style={styles.iconContainer}>
+                            <MaterialIcons name="camera-alt" size={30} color="#000" />
+                            <Text>Cámara</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={pickImage} style={styles.iconContainer}>
+                            <MaterialIcons name="folder" size={30} color="#000" />
+                            <Text>Galería</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={audioRecording ? stopRecording : startRecording} style={styles.iconContainer}>
+                            <MaterialIcons name={audioRecording ? "stop" : "mic"} size={30} color="#000" />
+                            <Text>{audioRecording ? 'Detener Audio' : 'Grabar Audio'}</Text>
+                        </TouchableOpacity>
+
+
+                    </View>
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Ingrese una descripción"
+                        value={description}
+                        onChangeText={setDescription}
+                        multiline
+                    />
+
+
+
+                    <TouchableOpacity style={styles.submitButton} onPress={handlePress}>
+                        {isLoading ? (
+                            <ActivityIndicator size="small" color="#fff" />
+                        ) : (
+                            <Text style={styles.submitButtonText}>Enviar</Text>
+                        )}
+                    </TouchableOpacity>
+
+                    {/* Historial de alertas */}
+                    <View style={styles.alertContainer}>
+                        {alertMessages.length > 0 && (
+                            <ScrollView style={styles.alertHistory}>
+                                {alertMessages.map((message, index) => (
+                                    <View key={index} style={styles.alertItem}>
+                                        <Text style={styles.alertText}>{message}</Text>
+                                        <TouchableOpacity onPress={viewDetails} style={styles.viewDetailsButton}>
+                                            <MaterialIcons name="visibility" size={20} color="#0066CC" />
+                                        </TouchableOpacity>
+                                    </View>
+                                ))}
+                            </ScrollView>
+                        )}
+                    </View>
+
+                    {/* Modal para ver los detalles */}
+                    <Modal
+                        visible={showDetails}
+                        transparent={true}
+                        animationType="slide"
+                        onRequestClose={closeDetails}
+                    >
+                        <View style={styles.modalOverlay}>
+                            <View style={styles.modalContent}>
+                                <Text style={styles.modalTitle}>Detalles del Reporte</Text>
+                                <Text>Descripción: {submittedData?.description}</Text>
+                                <Text>Ubicación: {submittedData?.location ? `${submittedData.location.coords.latitude}, ${submittedData.location.coords.longitude}` : 'No disponible'}</Text>
+                                <Text>Imágenes: {submittedData?.images.length}</Text>
+                                <TouchableOpacity onPress={closeDetails} style={styles.modalButton}>
+                                    <Text style={styles.modalButtonText}>Cerrar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+                </View>
             </View>
         </ScrollView>
 
@@ -375,11 +433,26 @@ export default function ReportIncident() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
+    containerGeneral: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'red',
         padding: 20,
-        backgroundColor: 'white',
     },
+    container: {
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 20,
+        height: '100%',
+        width: '100%',
+        maxWidth: 350,
+        shadowColor: '#000',
+        shadowOffset: { width: 8, height: 6 },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+        elevation: 5,
+    },
+
     title: {
         fontSize: 24,
         fontWeight: 'bold',
@@ -497,17 +570,19 @@ const styles = StyleSheet.create({
     buttonContent: {
         display: 'flex',
         flexDirection: 'row',
-        width: '100%',
+        width: 'auto',
         alignItems: 'center',
         marginTop: 10,
         gap: 3,
+        overflow:'hidden'
     },
     button: {
+       
         alignItems: 'center',
         backgroundColor: 'red',
         padding: 10,
         height: 60,
-        width: 180,
+        width: 150,
         color: 'white',
         borderRadius: 10,
         justifyContent: 'center',
@@ -517,11 +592,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'blue',
         padding: 10,
         height: 60,
-        width: 180,
+        width: 150,
         color: 'white',
         borderRadius: 10,
         justifyContent: 'center',
     },
+
     buttonText: {
         color: 'white',
         justifyContent: 'center',

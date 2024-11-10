@@ -1,13 +1,14 @@
 // src/screens/Home.tsx
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, ScrollView, View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { ImageBackground, Vibration, ScrollView, View, Linking, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import Entypo from '@expo/vector-icons/Entypo';
-import Ionicons from '@expo/vector-icons/Ionicons';
 
+import Ionicons from '@expo/vector-icons/Ionicons';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link } from 'expo-router';
+import { Audio } from 'expo-av';
 // Importa RootStackParamList desde App.tsx
 
 
@@ -17,8 +18,22 @@ export default function Menu() {
 
     const [UserName, setUserName] = useState('');
 
-    const activateAlarm = () => {
-        // Lógica para activar la alarma
+    const phoneNumber = '+51955467648';
+
+    const message = '¡Ayuda! Estoy en una situación de emergencia';
+
+
+    const activateAlarm = async () => {
+
+        Vibration.vibrate([500, 500, 500, 500, 500, 500, 500]);  // Vibra tres veces con intervalos de 500ms
+
+        const { sound } = await Audio.Sound.createAsync(
+            require('../assets/audio.mp3')
+        );
+        await sound.playAsync();
+        // Abrir WhatsApp con el mensaje
+        const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+        Linking.openURL(url).catch((err) => console.error('No se pudo abrir WhatsApp:', err));
     };
     const showSecurityTips = () => {
         Alert.alert(
@@ -55,13 +70,13 @@ export default function Menu() {
                         //  onPress={() => navigation.navigate("ReportIncident")}
                         >
                             <Link href="/Reporte">
-                            <View style={styles.stackLayout}>
-                                <MaterialIcons name="report" size={60} color="red" />
-                                <Text style={styles.menuButtonText}>Reportar</Text>
-                                <Text style={styles.menuButtonSubText}>Incidente</Text>
-                            </View>
+                                <View style={styles.stackLayout}>
+                                    <MaterialIcons name="report" size={60} color="red" />
+                                    <Text style={styles.menuButtonText}>Reportar</Text>
+                                    <Text style={styles.menuButtonSubText}>Incidente</Text>
+                                </View>
                             </Link>
-                            
+
                         </TouchableOpacity>
 
 
@@ -69,12 +84,12 @@ export default function Menu() {
                             style={styles.menuButton}
                         //  onPress={() => navigation.navigate("EmergencyServices")}
                         >
-                              <Link href="/Services">
-                            <View style={styles.stackLayout}>
-                                <MaterialIcons name="contact-emergency" size={55} color="blue" />
-                                <Text style={styles.menuButtonText}>Servicios</Text>
-                                <Text style={styles.menuButtonSubText}>Emergencia</Text>
-                            </View>
+                            <Link href="/Services">
+                                <View style={styles.stackLayout}>
+                                    <MaterialIcons name="contact-emergency" size={55} color="blue" />
+                                    <Text style={styles.menuButtonText}>Servicios</Text>
+                                    <Text style={styles.menuButtonSubText}>Emergencia</Text>
+                                </View>
                             </Link>
                         </TouchableOpacity>
 
@@ -105,17 +120,30 @@ export default function Menu() {
                                 </View>
                             </Link>
                         </TouchableOpacity>
-
+                        <TouchableOpacity
+                            style={styles.menuButton}
+                        //  onPress={() => navigation.navigate("EmergencyServices")}
+                        >
+                            <Link href="/Perfil">
+                                <View style={styles.stackLayout}>
+                                    <FontAwesome name="user" size={60} color="orange" />
+                                    <Text style={styles.menuButtonText}>Perfil</Text>
+                                    <Text style={styles.menuButtonSubText}>Hola!</Text>
+                                </View>
+                            </Link>
+                        </TouchableOpacity>
 
                         <TouchableOpacity
                             style={styles.menuButton}
                         // onPress={showSecurityTips}
                         >
-                            <View style={styles.stackLayout}>
-                                <AntDesign name="checksquare" size={60} color="#d6d900" />
-                                <Text style={styles.menuButtonText}>Consejos</Text>
-                                <Text style={styles.menuButtonSubText}>informativos</Text>
-                            </View>
+                            <Link href="/Tips">
+                                <View style={styles.stackLayout}>
+                                    <AntDesign name="checksquare" size={60} color="#d6d900" />
+                                    <Text style={styles.menuButtonText}>Consejos</Text>
+                                    <Text style={styles.menuButtonSubText}>informativos</Text>
+                                </View>
+                            </Link>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.footer}>
@@ -135,7 +163,6 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         flex: 1,
-
     },
 
     backgroundImage: {
@@ -171,13 +198,13 @@ const styles = StyleSheet.create({
         height: 160,
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10 },
+        shadowColor: 'white',
+        shadowOffset: { width: 90, height: 10 },
         shadowOpacity: 0.25,
-        shadowRadius: 3.5,
-        elevation: 5,
+        shadowRadius: 5,
+        elevation: 10,
         borderWidth: 5,
-        borderColor: '#4fa8fb',
+        borderColor: '#05089d',
 
     },
     sosButtonText: {
