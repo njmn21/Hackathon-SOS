@@ -58,41 +58,52 @@ export default function ReportIncident() {
     }, []);
 
     const enviarAlerta = async () => {
-        console.log("grupo "+grupoId+ "   usuario "+usuarioId + " ubicacion "+ubicacionURL+" descripcion  "+description);
+        console.log("grupo " + grupoId + "   usuario " + usuarioId + " ubicacion ::: " + ubicacionURL + " descripcion  " + description);
         if (grupoId && usuarioId && ubicacionURL && description) {
-            const url = `https://newback-sr47.onrender.com/api/alertas/crear?grupoId=${grupoId}&usuarioId=${usuarioId}&ubicacion=${ubicacionURL}&descripcion=${description}`;
+            // Codificar la URL del parámetro 'ubicacion' para manejar caracteres especiales
+            const encodedUbicacion = encodeURIComponent(ubicacionURL);
+            
+            console.log(":::>>>  " + encodedUbicacion);
+            const url = `https://newback-sr47.onrender.com/api/alertas/crear?grupoId=${grupoId}&usuarioId=${usuarioId}&ubicacion=${encodedUbicacion}&descripcion=${description}`;
     
             try {
                 const response = await fetch(url, {
                     method: 'POST',
                 });
     
-                // Check if the response is JSON
+                // Verificar si la respuesta es JSON
                 const contentType = response.headers.get("content-type");
     
                 if (!response.ok) {
                     throw new Error(`Error en la respuesta: ${response.statusText}`);
                 }
     
-                // Log the response body for debugging
+                // Registrar el cuerpo de la respuesta para depuración
                 const textResponse = await response.text();
                 console.log('Respuesta del servidor:', textResponse);
     
-                // Check if the response is JSON
+                // Verificar si la respuesta es JSON
                 if (contentType && contentType.includes('application/json')) {
                     const data = JSON.parse(textResponse);
                     console.log('Alerta enviada exitosamente:', data);
-                } else {
-                    // Handle non-JSON responses, such as plain text or HTML
-                    console.warn("La respuesta no es JSON, es posible que el servidor esté enviando un mensaje de error en texto plano.");
+    
+                    // Mostrar un mensaje de éxito al usuario
+                    Alert.alert('Alerta Enviada', 'La alerta ha sido enviada correctamente.', [
+                        { text: 'OK', onPress: () => console.log('Alert Closed') }
+                    ]);
                 }
             } catch (error) {
                 console.error('Error al enviar la alerta:', error);
+                // Mostrar un mensaje de error al usuario
+                Alert.alert('Error', 'Ocurrió un error al enviar la alerta. Inténtalo de nuevo.');
             }
         } else {
             console.log("Por favor, complete todos los campos antes de enviar la alerta.");
+            // Mostrar un mensaje de advertencia si faltan campos
+            Alert.alert('Campos Incompletos', 'Por favor complete todos los campos antes de enviar la alerta.');
         }
     };
+    
     
       
     // Permisos
