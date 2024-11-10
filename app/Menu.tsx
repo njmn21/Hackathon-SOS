@@ -30,10 +30,6 @@ export default function Menu() {
     return (
         <ScrollView>
             <View style={styles.container}>
-                <ImageBackground
-                    source={require('@/assets/images/mp.png')}
-                    style={styles.backgroundImage}
-                >
                     <View style={styles.overlay}></View>
                     <View style={styles.welcome}>
                         <Text style={styles.welcomeText}>BIENVENIDO {UserName.toUpperCase()}</Text>
@@ -120,12 +116,10 @@ export default function Menu() {
                     </View>
                     <View style={styles.footer}>
                         <TouchableOpacity style={styles.footerButton}>
-                            <Ionicons name="exit-outline" size={30} color="white" />
+                            <Ionicons name="exit-outline" size={30} color="black" />
                             <Text style={styles.menuButtonExit}>Cerrar sesión</Text>
                         </TouchableOpacity>
                     </View>
-
-                </ImageBackground>
             </View>
         </ScrollView>
     );
@@ -135,7 +129,9 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         flex: 1,
-
+        alignItems: 'center',
+        backgroundColor: 'white',
+        marginTop: 40,
     },
 
     backgroundImage: {
@@ -151,15 +147,16 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'black', // El color de la capa es negro
+        backgroundColor: 'white', // El color de la capa es negro
         opacity: 0.64, // Ajusta la opacidad (0 es completamente transparente, 1 es completamente opaco)
     },
     welcome: {
         top: 100,
+        color: 'black'
     },
     welcomeText: {
-        color: 'white',
-        fontSize: 40,
+        color: 'black',
+        fontSize: 35,
     },
     sosButton: {
         backgroundColor: '#05079d',
@@ -195,7 +192,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     menuButtonExit: {
-        color: 'white',
+        color: 'black',
         fontSize: 16,
         marginLeft: 10, // espacio entre el icono y el texto
 
