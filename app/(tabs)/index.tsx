@@ -1,52 +1,49 @@
-// src/screens/Home.tsx
 import React from 'react';
-import { ImageBackground, View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Link } from 'expo-router';
-// Importa RootStackParamList desde App.tsx
-
-
 
 export default function HomeScreen() {
-
-  
   return (
-    <View style={styles.container}>    
-      <TouchableOpacity
-        style={styles.sosButton}
-      >
-            <Link href="/Menu" style={styles.button}>
+    <View style={styles.container}>
+      <Text style={styles.title2}>Bienvenido a la aplicación.</Text>
+      <Text style={styles.title}>Alerta Urbana</Text>
+      <Text style={styles.title3}>¡Ahora podrás notificarnos en tiempo</Text>
+      <Text style={styles.title3}>real tus emergencias las 24 horas y</Text>
+      <Text style={styles.title4}>acceder a más recursos.</Text>
+      <View style={styles.buttonContainer}>
+        <Link href='/Menu'>
+          <TouchableOpacity style={styles.sosButton}>
             <Text style={styles.sosButtonText}>SOS</Text>
-      </Link>  
-      </TouchableOpacity>
+          </TouchableOpacity>
+        </Link>
+      </View>
+      <Text style={styles.title5}>#AlertaUrbanaSomosTodos</Text>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    flex: 1,  
-  },
-
-  backgroundImage: {
+    marginTop: 100,
     flex: 1,
-    width: '100%', 
-    height: '100%', 
-    justifyContent: 'center', 
-    alignItems: 'center',
+    paddingTop: 20,
+    paddingLeft: 10,
+    marginHorizontal: 5,
+    marginLeft: 30,
   },
-  overlay: {
-    position: 'absolute', // Permite que la capa se superponga sobre la imagen
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'black', // El color de la capa es negro
-    opacity: 0.64, // Ajusta la opacidad (0 es completamente transparente, 1 es completamente opaco)
+  buttonContainer: {
+    flex: 1,
+    paddingLeft: 70,
+  },
+  title: {
+    fontSize: 70,
+    fontWeight: 'bold',
+    fontFamily: 'sans-serif',
+    marginBottom: 20,
+    color: '#025d84',
   },
   sosButton: {
-    backgroundColor: '#7f0000',
+    backgroundColor: '#bb0000',
     padding: 20,
     borderRadius: 100,
     width: 160,
@@ -58,50 +55,34 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.5,
     elevation: 5,
-    
-  },
-  button: {
-    fontSize: 20,
-    textDecorationLine: 'underline',
-    color: '#fff',
+    marginTop: 100, // Espacio entre el título y el botón SOS
   },
   sosButtonText: {
-    fontSize: 30,
+    fontSize: 45,
     fontWeight: 'bold',
     color: '#fff',
   },
-  menuGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginTop: 20,
-  },
-  menuButton: {
-    backgroundColor: '#bd0003',
-    width:160,
-    height:100,
-    margin: 10,
-    padding: 14,
-    borderRadius: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.5,
-    elevation: 8,
-  },
-  stackLayout: {
-    alignItems: 'center',
-  },
-  menuButtonText: {
+  title2: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
+    marginBottom: 0,
+    color: '#025d84',
   },
-  menuButtonSubText: {
-    fontSize: 12,
-    color: '#fff',
+  title3: {
+    fontSize: 17,
+    color: '#8a8a8a',
+    marginBottom: 0,
+  },
+  title4: {
+    fontSize: 17,
+    color: '#8a8a8a',
+    marginBottom: 50,
+  },
+  title5: {
+    fontSize: 19,
+    color: '#32a0ad',
+    marginBottom: 130,
+    marginLeft: 30,
+    textDecorationLine: 'underline',
+    fontWeight: 'bold',
   },
 });
-
-

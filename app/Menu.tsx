@@ -8,7 +8,6 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link } from 'expo-router';
-import { Audio } from 'expo-av';
 // Importa RootStackParamList desde App.tsx
 
 
@@ -22,15 +21,11 @@ export default function Menu() {
 
     const message = '¡Ayuda! Estoy en una situación de emergencia';
 
+    // Función para activar la alarma SOS
+    const activateAlarm = () => {
+        // Vibration - Hace vibrar el teléfono
+        Vibration.vibrate([500, 500, 500]);  // Vibra tres veces con intervalos de 500ms
 
-    const activateAlarm = async () => {
-
-        Vibration.vibrate([500, 500, 500, 500, 500, 500, 500]);  // Vibra tres veces con intervalos de 500ms
-
-        const { sound } = await Audio.Sound.createAsync(
-            require('../assets/audio.mp3')
-        );
-        await sound.playAsync();
         // Abrir WhatsApp con el mensaje
         const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
         Linking.openURL(url).catch((err) => console.error('No se pudo abrir WhatsApp:', err));
