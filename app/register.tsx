@@ -20,6 +20,7 @@ export default function Register() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',  // Asegúrate de que se espere JSON en la respuesta
         },
         body: JSON.stringify({
           nombre: name,
@@ -30,6 +31,7 @@ export default function Register() {
           direccion: address,
         }),
       });
+      
 
       const data = await response.json();
 
