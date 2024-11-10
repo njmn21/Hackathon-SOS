@@ -7,6 +7,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
 // Importa RootStackParamList desde App.tsx
+import { Link } from 'expo-router';
 
 
 
@@ -80,12 +81,14 @@ export default function HomeScreen() {
                         style={styles.menuButton}
                     //onPress={() => navigation.navigate("Notifications")}
                     >
-                        <View style={styles.stackLayout}>
-                            <AntDesign name="contacts" size={60} color="purple" />
-                            <Text style={styles.menuButtonText}>Registrar</Text>
-                            <Text style={styles.menuButtonSubText}>Contactos</Text>
+                        <Link href="/RegistrarContactos">
+                            <View style={styles.stackLayout}>
+                                <AntDesign name="contacts" size={60} color="purple" />
+                                <Text style={styles.menuButtonText}>Registrar</Text>
+                                <Text style={styles.menuButtonSubText}>Contactos</Text>
 
-                        </View>
+                            </View>
+                        </Link>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -167,7 +170,7 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
     footer: {
-        
+
         alignItems: 'center',
         justifyContent: 'center',
     },
