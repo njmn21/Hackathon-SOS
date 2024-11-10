@@ -17,14 +17,6 @@ export default function Menu() {
 
     const [UserName, setUserName] = useState('');
 
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        if(user && user.nombre) {
-            setUserName(user.nombre);
-        }
-    } , []);
-
-
     const activateAlarm = () => {
         // Lógica para activar la alarma
     };
@@ -63,13 +55,13 @@ export default function Menu() {
                         //  onPress={() => navigation.navigate("ReportIncident")}
                         >
                             <Link href="/Reporte">
-                            <View style={styles.stackLayout}>
-                                <MaterialIcons name="report" size={60} color="red" />
-                                <Text style={styles.menuButtonText}>Reportar</Text>
-                                <Text style={styles.menuButtonSubText}>Incidente</Text>
-                            </View>
+                                <View style={styles.stackLayout}>
+                                    <MaterialIcons name="report" size={60} color="red" />
+                                    <Text style={styles.menuButtonText}>Reportar</Text>
+                                    <Text style={styles.menuButtonSubText}>Incidente</Text>
+                                </View>
                             </Link>
-                            
+
                         </TouchableOpacity>
 
 
@@ -77,11 +69,13 @@ export default function Menu() {
                             style={styles.menuButton}
                         //  onPress={() => navigation.navigate("EmergencyServices")}
                         >
-                            <View style={styles.stackLayout}>
-                                <MaterialIcons name="contact-emergency" size={55} color="blue" />
-                                <Text style={styles.menuButtonText}>Servicios</Text>
-                                <Text style={styles.menuButtonSubText}>Emergencia</Text>
-                            </View>
+                            <Link href="/Services">
+                                <View style={styles.stackLayout}>
+                                    <MaterialIcons name="contact-emergency" size={55} color="blue" />
+                                    <Text style={styles.menuButtonText}>Servicios</Text>
+                                    <Text style={styles.menuButtonSubText}>Emergencia</Text>
+                                </View>
+                            </Link>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -112,19 +106,6 @@ export default function Menu() {
                             </Link>
                         </TouchableOpacity>
 
-                        <TouchableOpacity
-                            style={styles.menuButton}
-                        // onPress={() => navigation.navigate("UserLocation")}
-                        >
-                            <Link href="/Ubication" >
-                                <View style={styles.stackLayout}>
-                                    <Entypo name="location-pin" size={60} color="orange" />
-
-                                    <Text style={styles.menuButtonText}>Mi Ubicación</Text>
-                                    <Text style={styles.menuButtonSubText}>de alerta</Text>
-                                </View>
-                            </Link>
-                        </TouchableOpacity>
 
                         <TouchableOpacity
                             style={styles.menuButton}

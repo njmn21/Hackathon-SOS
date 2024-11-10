@@ -1,74 +1,48 @@
-import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
+import { Colors } from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
-type Contact = {
-  id: string;
-  name: string;
-  phone: string;
-};
-
-const emergencyContacts: Contact[] = [
-  { id: '1', name: 'Policía', phone: '911' },
-  { id: '2', name: 'Bomberos', phone: '911' },
-  { id: '3', name: 'Ambulancia', phone: '911' },
-  { id: '4', name: 'Protección Civil', phone: '911' },
-];
-
-const ContactItem: React.FC<Contact> = ({ name, phone }) => (
-  <View style={styles.contactItem}>
-    <Feather name="phone" size={24} color="black" style={styles.icon} />
-    <View style={styles.contactText}>
-      <Text style={styles.contactName}>{name}</Text>
-      <Text style={styles.contactPhone}>{phone}</Text>
-    </View>
-  </View>
-);
-
-const EmergencyContactsScreen: React.FC = () => {
+export default function Contacts() {
+  
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Contactos de Emergencia</Text>
-      <FlatList
-        data={emergencyContacts}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ContactItem {...item} />}
-      />
+    <View style={[styles.container]}>
+      
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    fontSize: 28,
+    fontWeight: '600',
+    marginBottom: 30,
   },
-  contactItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  icon: {
-    marginRight: 10,
-  },
-  contactText: {
-    flexDirection: 'column',
-  },
-  contactName: {
-    fontSize: 18,
-  },
-  contactPhone: {
+  input: {
+    width: '100%',
+    height: 50,
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 15,
     fontSize: 16,
-    color: 'gray',
+    marginBottom: 15,
+  },
+  button: {
+    width: '100%',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
-
-export default EmergencyContactsScreen;

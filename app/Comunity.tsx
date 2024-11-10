@@ -38,13 +38,7 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.container}>
-            <Link href="/chat/id">
-                <FlatList
-                    data={chats}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => <ChatItem {...item} />}
-                />
-            </Link>
+            
         </View>
     );
 }
