@@ -1,98 +1,27 @@
 // src/screens/Home.tsx
 import React from 'react';
 import { ImageBackground, View, Text, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Link } from 'expo-router';
 // Importa RootStackParamList desde App.tsx
 
 
 
 export default function HomeScreen() {
 
-  const activateAlarm = () => {
-    // Lógica para activar la alarma
-  };
-  const showSecurityTips = () => {
-    Alert.alert(
-      "Consejos de Seguridad",
-      "• Mantén las puertas y ventanas cerradas\n• Conoce a tus vecinos\n• Ten a mano números de emergencia\n• Mantén iluminado el exterior de tu casa",
-      [{ text: "Entendido" }]
-    );
-  };
+  
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require('@/assets/images/mp.png')}
-        style={styles.backgroundImage}
-      >
-        <View style={styles.overlay}></View>
-
-      {/* Botón SOS */}
+      
       <TouchableOpacity
         style={styles.sosButton}
-        onPress={activateAlarm}
       >
-        <Text style={styles.sosButtonText}>SOS</Text>
+            <Link href="/Menu" style={styles.button}>
+            <Text style={styles.sosButtonText}>SOS</Text>
+      </Link>
+       
       </TouchableOpacity>
 
-      {/* Grid Layout (Botones de menú) */}
-      <View style={styles.menuGrid}>
-        <TouchableOpacity
-          style={styles.menuButton}
-        //  onPress={() => navigation.navigate("ReportIncident")}
-        >
-          <View style={styles.stackLayout}>
-            <Text style={styles.menuButtonText}>Reportarr</Text>
-            <Text style={styles.menuButtonSubText}>Incidente</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.menuButton}
-        //  onPress={() => navigation.navigate("EmergencyServices")}
-        >
-          <View style={styles.stackLayout}>
-            <Text style={styles.menuButtonText}>Servicios</Text>
-            <Text style={styles.menuButtonSubText}>Emergencia</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.menuButton}
-        // onPress={() => navigation.navigate("Community")}
-        >
-          <View style={styles.stackLayout}>
-            <Text style={styles.menuButtonText}>Comunidad</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.menuButton}
-        //onPress={() => navigation.navigate("Notifications")}
-        >
-          <View style={styles.stackLayout}>
-            <Text style={styles.menuButtonText}>Notificaciones</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.menuButton}
-        // onPress={() => navigation.navigate("UserLocation")}
-        >
-          <View style={styles.stackLayout}>
-            <Text style={styles.menuButtonText}>Mi Ubicación</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.menuButton}
-        // onPress={showSecurityTips}
-        >
-          <View style={styles.stackLayout}>
-            <Text style={styles.menuButtonText}>Consejos</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-      
-      </ImageBackground>
     </View>
   );
 };
@@ -133,6 +62,11 @@ const styles = StyleSheet.create({
     shadowRadius: 3.5,
     elevation: 5,
     
+  },
+  button: {
+    fontSize: 20,
+    textDecorationLine: 'underline',
+    color: '#fff',
   },
   sosButtonText: {
     fontSize: 30,
