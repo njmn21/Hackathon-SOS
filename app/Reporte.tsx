@@ -232,7 +232,7 @@ export default function ReportIncident() {
                 <View style={styles.ubicationContent} >
                     <TouchableOpacity
                         style={{
-                            height: 60,
+                            height: 50,
                             backgroundColor: 'green',
                             marginTop: 3,
                             marginBottom: 3,

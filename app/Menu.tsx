@@ -55,13 +55,13 @@ export default function Menu() {
                         //  onPress={() => navigation.navigate("ReportIncident")}
                         >
                             <Link href="/Reporte">
-                                <View style={styles.stackLayout}>
-                                    <MaterialIcons name="report" size={60} color="red" />
-                                    <Text style={styles.menuButtonText}>Reportar</Text>
-                                    <Text style={styles.menuButtonSubText}>Incidente</Text>
-                                </View>
+                            <View style={styles.stackLayout}>
+                                <MaterialIcons name="report" size={60} color="red" />
+                                <Text style={styles.menuButtonText}>Reportar</Text>
+                                <Text style={styles.menuButtonSubText}>Incidente</Text>
+                            </View>
                             </Link>
-
+                            
                         </TouchableOpacity>
 
 
@@ -69,12 +69,12 @@ export default function Menu() {
                             style={styles.menuButton}
                         //  onPress={() => navigation.navigate("EmergencyServices")}
                         >
-                            <Link href="/Services">
-                                <View style={styles.stackLayout}>
-                                    <MaterialIcons name="contact-emergency" size={55} color="blue" />
-                                    <Text style={styles.menuButtonText}>Servicios</Text>
-                                    <Text style={styles.menuButtonSubText}>Emergencia</Text>
-                                </View>
+                              <Link href="/Services">
+                            <View style={styles.stackLayout}>
+                                <MaterialIcons name="contact-emergency" size={55} color="blue" />
+                                <Text style={styles.menuButtonText}>Servicios</Text>
+                                <Text style={styles.menuButtonSubText}>Emergencia</Text>
+                            </View>
                             </Link>
                         </TouchableOpacity>
 
