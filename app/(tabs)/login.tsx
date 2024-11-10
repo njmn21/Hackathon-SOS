@@ -3,8 +3,7 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Alert } fro
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Link } from 'expo-router'; // Asegúrate de importar correctamente desde expo-router
-
+import { Link, useRouter } from 'expo-router';
 type LoginProps = {
   onLogin: () => void; 
 };
@@ -13,7 +12,7 @@ export default function Login() {
   const colorScheme: 'light' | 'dark' = useColorScheme() ?? 'light';
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-
+  const router = useRouter();
   const handleLogin = async () => {
     try {
       const response = await fetch('http://localhost:8080/api/usuarios/login', {
@@ -32,7 +31,7 @@ export default function Login() {
         const { contrasena, contactosEmergencia, ...userData } = data;
         console.log(data);
         await AsyncStorage.setItem('user', JSON.stringify(userData));
-
+        router.push('/Menu');
         Alert.alert('Bienvenido', 'Inicio de sesión exitoso');
       } else {
         Alert.alert('Error', data?.message || 'Ocurrió un error');
