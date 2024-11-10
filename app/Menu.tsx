@@ -12,6 +12,7 @@ import { Link } from 'expo-router';
 
 
 
+
 export default function Menu() {
 
     const activateAlarm = () => {
@@ -58,6 +59,7 @@ export default function Menu() {
                             </View>
                         </TouchableOpacity>
 
+
                         <TouchableOpacity
                             style={styles.menuButton}
                         //  onPress={() => navigation.navigate("EmergencyServices")}
@@ -68,6 +70,20 @@ export default function Menu() {
                                 <Text style={styles.menuButtonSubText}>Emergencia</Text>
                             </View>
                         </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.menuButton}
+                    //onPress={() => navigation.navigate("Notifications")}
+                    >
+                        <Link href="/RegistrarContactos">
+                            <View style={styles.stackLayout}>
+                                <AntDesign name="contacts" size={60} color="purple" />
+                                <Text style={styles.menuButtonText}>Registrar</Text>
+                                <Text style={styles.menuButtonSubText}>Contactos</Text>
+
+                            </View>
+                        </Link>
+                    </TouchableOpacity>
 
 
                         <TouchableOpacity style={styles.menuButton}>
@@ -85,17 +101,7 @@ export default function Menu() {
 
 
 
-                        <TouchableOpacity
-                            style={styles.menuButton}
-                        //onPress={() => navigation.navigate("Notifications")}
-                        >
-                            <View style={styles.stackLayout}>
-                                <AntDesign name="contacts" size={60} color="purple" />
-                                <Text style={styles.menuButtonText}>Registrar</Text>
-                                <Text style={styles.menuButtonSubText}>Contactos</Text>
-
-                            </View>
-                        </TouchableOpacity>
+                       
 
                         <TouchableOpacity
                             style={styles.menuButton}
