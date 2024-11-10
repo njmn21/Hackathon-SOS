@@ -43,7 +43,6 @@ export default function Login() {
 
   return (
     <View style={[styles.container, { backgroundColor: Colors[colorScheme].background }]}>
-      <Image source={require('../../assets/images/icon.png')} style={styles.logo} />
 
       <Text style={[styles.title, { color: Colors[colorScheme].text }]}>Inicia Sesión</Text>
 
@@ -80,13 +79,6 @@ export default function Login() {
 
 
       </View>
-
-      {/* Botón SOS debajo del formulario de login */}
-      <TouchableOpacity style={styles.sosButton}>
-        <Link href="/Menu" style={styles.button}>
-          <Text style={styles.sosButtonText}>SOS</Text>
-        </Link>
-      </TouchableOpacity>
     </View>
   );
 }
