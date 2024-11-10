@@ -40,115 +40,111 @@ export default function Menu() {
     return (
         <ScrollView>
             <View style={styles.container}>
-                <ImageBackground
-                    source={require('@/assets/images/mp.png')}
-                    style={styles.backgroundImage}
-                >
-                    <View style={styles.overlay}></View>
-                    <View style={styles.welcome}>
-                        <Text style={styles.welcomeText}>BIENVENIDO {UserName.toUpperCase()}</Text>
-                    </View>
-                    {/* Botón SOS */}
+                <Text style={styles.text1}>ALERATA URBANA</Text>
+                <Text style={styles.text2}>SOMOS TODOS</Text>
+                <View style={styles.overlay}></View>
+                <View style={styles.welcome}>
+                    <Text style={styles.welcomeText}>BIENVENIDO {UserName.toUpperCase()}</Text>
+                </View>
+                {/* Botón SOS */}
 
+                <TouchableOpacity
+                    style={styles.sosButton}
+                    onPress={activateAlarm}
+                >
+                    <Text style={styles.sosButtonText}>SOS</Text>
+                </TouchableOpacity>
+
+
+                {/* Grid Layout (Botones de menú) */}
+                <View style={styles.menuGrid}>
                     <TouchableOpacity
-                        style={styles.sosButton}
-                        onPress={activateAlarm}
+                        style={styles.menuButton}
+                    //  onPress={() => navigation.navigate("ReportIncident")}
                     >
-                        <Text style={styles.sosButtonText}>SOS</Text>
+                        <Link href="/Reporte">
+                            <View style={styles.stackLayout}>
+                                <MaterialIcons name="report" size={60} color="red" />
+                                <Text style={styles.menuButtonText}>Reportar</Text>
+                                <Text style={styles.menuButtonSubText}>Incidente</Text>
+                            </View>
+                        </Link>
+
                     </TouchableOpacity>
 
 
-                    {/* Grid Layout (Botones de menú) */}
-                    <View style={styles.menuGrid}>
-                        <TouchableOpacity
-                            style={styles.menuButton}
-                        //  onPress={() => navigation.navigate("ReportIncident")}
-                        >
-                            <Link href="/Reporte">
-                                <View style={styles.stackLayout}>
-                                    <MaterialIcons name="report" size={60} color="red" />
-                                    <Text style={styles.menuButtonText}>Reportar</Text>
-                                    <Text style={styles.menuButtonSubText}>Incidente</Text>
-                                </View>
-                            </Link>
+                    <TouchableOpacity
+                        style={styles.menuButton}
+                    //  onPress={() => navigation.navigate("EmergencyServices")}
+                    >
+                        <Link href="/Services">
+                            <View style={styles.stackLayout}>
+                                <MaterialIcons name="contact-emergency" size={55} color="blue" />
+                                <Text style={styles.menuButtonText}>Servicios</Text>
+                                <Text style={styles.menuButtonSubText}>Emergencia</Text>
+                            </View>
+                        </Link>
+                    </TouchableOpacity>
 
-                        </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.menuButton}
+                    //onPress={() => navigation.navigate("Notifications")}
+                    >
+                        <Link href="/RegistrarContactos">
+                            <View style={styles.stackLayout}>
+                                <AntDesign name="contacts" size={60} color="purple" />
+                                <Text style={styles.menuButtonText}>Registrar</Text>
+                                <Text style={styles.menuButtonSubText}>Contactos</Text>
 
-
-                        <TouchableOpacity
-                            style={styles.menuButton}
-                        //  onPress={() => navigation.navigate("EmergencyServices")}
-                        >
-                            <Link href="/Services">
-                                <View style={styles.stackLayout}>
-                                    <MaterialIcons name="contact-emergency" size={55} color="blue" />
-                                    <Text style={styles.menuButtonText}>Servicios</Text>
-                                    <Text style={styles.menuButtonSubText}>Emergencia</Text>
-                                </View>
-                            </Link>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            style={styles.menuButton}
-                        //onPress={() => navigation.navigate("Notifications")}
-                        >
-                            <Link href="/RegistrarContactos">
-                                <View style={styles.stackLayout}>
-                                    <AntDesign name="contacts" size={60} color="purple" />
-                                    <Text style={styles.menuButtonText}>Registrar</Text>
-                                    <Text style={styles.menuButtonSubText}>Contactos</Text>
-
-                                </View>
-                            </Link>
-                        </TouchableOpacity>
+                            </View>
+                        </Link>
+                    </TouchableOpacity>
 
 
-                        <TouchableOpacity style={styles.menuButton}>
-                            <Link href="/ChatGlobal" >
-                                <View style={styles.stackLayout}>
-                                    <FontAwesome5 name="user-friends" size={60} color="green" />
+                    <TouchableOpacity style={styles.menuButton}>
+                        <Link href="/ChatGlobal" >
+                            <View style={styles.stackLayout}>
+                                <FontAwesome5 name="user-friends" size={60} color="green" />
 
-                                    <Text style={styles.menuButtonText}>Comunidad</Text>
+                                <Text style={styles.menuButtonText}>Comunidad</Text>
 
-                                    <Text style={styles.menuButtonSubText}>Nuestra</Text>
+                                <Text style={styles.menuButtonSubText}>Nuestra</Text>
 
-                                </View>
-                            </Link>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.menuButton}
-                        //  onPress={() => navigation.navigate("EmergencyServices")}
-                        >
-                            <Link href="/Perfil">
-                                <View style={styles.stackLayout}>
-                                    <FontAwesome name="user" size={60} color="orange" />
-                                    <Text style={styles.menuButtonText}>Perfil</Text>
-                                    <Text style={styles.menuButtonSubText}>Hola!</Text>
-                                </View>
-                            </Link>
-                        </TouchableOpacity>
+                            </View>
+                        </Link>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.menuButton}
+                    //  onPress={() => navigation.navigate("EmergencyServices")}
+                    >
+                        <Link href="/Perfil">
+                            <View style={styles.stackLayout}>
+                                <FontAwesome name="user" size={60} color="orange" />
+                                <Text style={styles.menuButtonText}>Perfil</Text>
+                                <Text style={styles.menuButtonSubText}>Hola!</Text>
+                            </View>
+                        </Link>
+                    </TouchableOpacity>
 
-                        <TouchableOpacity
-                            style={styles.menuButton}
-                        // onPress={showSecurityTips}
-                        >
-                            <Link href="/Tips">
-                                <View style={styles.stackLayout}>
-                                    <AntDesign name="checksquare" size={60} color="#d6d900" />
-                                    <Text style={styles.menuButtonText}>Consejos</Text>
-                                    <Text style={styles.menuButtonSubText}>informativos</Text>
-                                </View>
-                            </Link>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.footer}>
-                        <TouchableOpacity style={styles.footerButton}>
-                            <Ionicons name="exit-outline" size={30} color="white" />
-                            <Text style={styles.menuButtonExit}>Cerrar sesión</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                </ImageBackground>
+                    <TouchableOpacity
+                        style={styles.menuButton}
+                    // onPress={showSecurityTips}
+                    >
+                        <Link href="/Tips">
+                            <View style={styles.stackLayout}>
+                                <AntDesign name="checksquare" size={60} color="#d6d900" />
+                                <Text style={styles.menuButtonText}>Consejos</Text>
+                                <Text style={styles.menuButtonSubText}>informativos</Text>
+                            </View>
+                        </Link>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.footer}>
+                    <TouchableOpacity style={styles.footerButton}>
+                        <Ionicons name="exit-outline" size={30} color="black" />
+                        <Text style={styles.menuButtonExit}>Cerrar sesión</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </ScrollView>
     );
@@ -173,15 +169,27 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'black', // El color de la capa es negro
+        backgroundColor: 'white', // El color de la capa es negro
         opacity: 0.64, // Ajusta la opacidad (0 es completamente transparente, 1 es completamente opaco)
     },
     welcome: {
-        top: 100,
+        backgroundColor: 'white',
+        width: '44%',
+        height: 160,
+        margin: 10,
+        padding: 20,
+        borderRadius: 15,
+        alignItems: 'center',
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.5,
+        shadowColor: '#000',
+        elevation: 8,
+        marginTop: 80
     },
     welcomeText: {
-        color: 'white',
-        fontSize: 40,
+        color: 'black',
+        fontSize: 20,
     },
     sosButton: {
         backgroundColor: '#05079d',
@@ -193,7 +201,7 @@ const styles = StyleSheet.create({
         height: 160,
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: 'white',
+        shadowColor: 'black',
         shadowOffset: { width: 90, height: 10 },
         shadowOpacity: 0.25,
         shadowRadius: 5,
@@ -211,13 +219,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 20,
+        marginTop: 20,
     },
     footerButton: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     menuButtonExit: {
-        color: 'white',
+        color: 'black',
         fontSize: 16,
         marginLeft: 10, // espacio entre el icono y el texto
 
@@ -257,6 +266,21 @@ const styles = StyleSheet.create({
     menuButtonSubText: {
         fontSize: 14,
         color: 'grey',
+    },
+    text1: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: 'black',
+        marginTop: 90,
+        marginLeft: 10,
+        textAlign: 'center',
+    },
+    text2: {
+        fontSize: 20,
+        color: 'black',
+        marginLeft: 10,
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
 });
 
