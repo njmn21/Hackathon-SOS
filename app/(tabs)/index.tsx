@@ -11,7 +11,8 @@ export default function HomeScreen() {
 
   
   return (
-    <View style={styles.container}>    
+    <View style={styles.container}>
+      <Text style={styles.title}>Alerta Urbana</Text>   
       <TouchableOpacity
         style={styles.sosButton}
       >
@@ -101,6 +102,13 @@ const styles = StyleSheet.create({
   menuButtonSubText: {
     fontSize: 12,
     color: '#fff',
+  },
+  title: {
+    fontSize: 100,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    fontFamily: 'Roboto',
+    marginLeft: 20,
   },
 });
 
