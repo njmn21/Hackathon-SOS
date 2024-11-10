@@ -21,20 +21,20 @@ export default function Menu() {
 
     useEffect(() => {
         const cargarDatos = async () => {
-          try {
-            const userDataString = await AsyncStorage.getItem('user');
-            if (userDataString) {
-              const userData = JSON.parse(userDataString);
-              setUserName(userData.nombre); 
-    
+            try {
+                const userDataString = await AsyncStorage.getItem('user');
+                if (userDataString) {
+                    const userData = JSON.parse(userDataString);
+                    setUserName(userData.nombre);
+
+                }
+            } catch (error) {
+                console.error("Error al cargar datos de AsyncStorage:", error);
             }
-          } catch (error) {
-            console.error("Error al cargar datos de AsyncStorage:", error);
-          }
         };
-    
+
         cargarDatos();
-      }, []);
+    }, []);
 
 
     const phoneNumber = '+51955467648';
@@ -60,20 +60,20 @@ export default function Menu() {
     return (
         <ScrollView>
             <View style={styles.container}>
-                <Text style={styles.text1}>ALERATA URBANA</Text>
+                <Text style={styles.text1}>ALERTA URBANA</Text>
                 <Text style={styles.text2}>SOMOS TODOS</Text>
-                <View style={styles.overlay}></View>
                 <View style={styles.welcome}>
-                    <Text style={styles.welcomeText}>BIENVENIDO {UserName.toUpperCase()}</Text>
-                </View>
-                {/* Botón SOS */}
+                    <Text style={styles.welcomeText}>BIENVENIDO {UserName.toUpperCase()},</Text>
+                    <Text style={styles.text3}>¿Tienes una emergencia?</Text>
+                    {/* Botón SOS */}
 
-                <TouchableOpacity
-                    style={styles.sosButton}
-                    onPress={activateAlarm}
-                >
-                    <Text style={styles.sosButtonText}>SOS</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.sosButton}
+                        onPress={activateAlarm}
+                    >
+                        <Text style={styles.sosButtonText}>SOS</Text>
+                    </TouchableOpacity>
+                </View>
 
 
                 {/* Grid Layout (Botones de menú) */}
@@ -194,27 +194,31 @@ const styles = StyleSheet.create({
     },
     welcome: {
         backgroundColor: 'white',
-        width: '44%',
+        width: '60%',
         height: 160,
         margin: 10,
         padding: 20,
         borderRadius: 15,
-        alignItems: 'center',
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.25,
         shadowRadius: 3.5,
         shadowColor: '#000',
         elevation: 8,
-        marginTop: 80
+        marginTop: 80,
+        alignItems: 'center',
+        marginBottom: 160,
+        marginLeft: 80
     },
     welcomeText: {
-        color: 'black',
         fontSize: 20,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        color: '#2259a0'
     },
     sosButton: {
-        backgroundColor: '#05079d',
+        backgroundColor: '#1d66c2',
         padding: 20,
-        marginTop: '40%',
+        marginTop: '20%',
         marginBottom: '10%',
         borderRadius: 100,
         width: 160,
@@ -227,7 +231,7 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 10,
         borderWidth: 5,
-        borderColor: '#05089d',
+        borderColor: '#1d66c2',
 
     },
     sosButtonText: {
@@ -285,22 +289,27 @@ const styles = StyleSheet.create({
     },
     menuButtonSubText: {
         fontSize: 14,
-        color: 'grey',
+        color: 'black',
     },
     text1: {
-        fontSize: 30,
+        fontSize: 33,
         fontWeight: 'bold',
         marginTop: 90,
         marginLeft: 10,
         textAlign: 'center',
-        color: '#024c66',
+        color: '#025d84',
     },
     text2: {
         fontSize: 20,
         marginLeft: 10,
         fontWeight: 'bold',
         textAlign: 'center',
-        color: '#024c66'
+        color: '#4d7fc0'
+    },
+    text3: {
+        fontSize: 15,
+        textAlign: 'center',
+        color: 'black',
     },
 });
 
