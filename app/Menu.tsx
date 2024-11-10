@@ -52,11 +52,14 @@ export default function Menu() {
                             style={styles.menuButton}
                         //  onPress={() => navigation.navigate("ReportIncident")}
                         >
+                            <Link href="/Reporte">
                             <View style={styles.stackLayout}>
                                 <MaterialIcons name="report" size={60} color="red" />
                                 <Text style={styles.menuButtonText}>Reportar</Text>
                                 <Text style={styles.menuButtonSubText}>Incidente</Text>
                             </View>
+                            </Link>
+                            
                         </TouchableOpacity>
 
 
@@ -71,19 +74,19 @@ export default function Menu() {
                             </View>
                         </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={styles.menuButton}
-                    //onPress={() => navigation.navigate("Notifications")}
-                    >
-                        <Link href="/RegistrarContactos">
-                            <View style={styles.stackLayout}>
-                                <AntDesign name="contacts" size={60} color="purple" />
-                                <Text style={styles.menuButtonText}>Registrar</Text>
-                                <Text style={styles.menuButtonSubText}>Contactos</Text>
+                        <TouchableOpacity
+                            style={styles.menuButton}
+                        //onPress={() => navigation.navigate("Notifications")}
+                        >
+                            <Link href="/RegistrarContactos">
+                                <View style={styles.stackLayout}>
+                                    <AntDesign name="contacts" size={60} color="purple" />
+                                    <Text style={styles.menuButtonText}>Registrar</Text>
+                                    <Text style={styles.menuButtonSubText}>Contactos</Text>
 
-                            </View>
-                        </Link>
-                    </TouchableOpacity>
+                                </View>
+                            </Link>
+                        </TouchableOpacity>
 
 
                         <TouchableOpacity style={styles.menuButton}>
@@ -98,10 +101,6 @@ export default function Menu() {
                                 </View>
                             </Link>
                         </TouchableOpacity>
-
-
-
-                       
 
                         <TouchableOpacity
                             style={styles.menuButton}
