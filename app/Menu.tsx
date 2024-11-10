@@ -19,10 +19,10 @@ export default function Menu() {
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
-        if(user && user.nombre) {
+        if (user && user.nombre) {
             setUserName(user.nombre);
         }
-    } , []);
+    }, []);
 
 
     const activateAlarm = () => {
@@ -44,7 +44,7 @@ export default function Menu() {
                 >
                     <View style={styles.overlay}></View>
                     <View style={styles.welcome}>
-                        <Text style={styles.welcomeText}>BIENVENIDO {UserName.toUpperCase()}</Text>
+                        <Text style={styles.welcomeText}>BIENVENIDO</Text>
                     </View>
                     {/* Botón SOS */}
 
@@ -74,26 +74,28 @@ export default function Menu() {
                             style={styles.menuButton}
                         //  onPress={() => navigation.navigate("EmergencyServices")}
                         >
-                            <View style={styles.stackLayout}>
-                                <MaterialIcons name="contact-emergency" size={55} color="blue" />
-                                <Text style={styles.menuButtonText}>Servicios</Text>
-                                <Text style={styles.menuButtonSubText}>Emergencia</Text>
-                            </View>
+                            <Link href='/ServiciosEmergencia'>
+                                <View style={styles.stackLayout}>
+                                    <MaterialIcons name="contact-emergency" size={55} color="blue" />
+                                    <Text style={styles.menuButtonText}>Servicios</Text>
+                                    <Text style={styles.menuButtonSubText}>Emergencia</Text>
+                                </View>
+                            </Link>
                         </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={styles.menuButton}
-                    //onPress={() => navigation.navigate("Notifications")}
-                    >
-                        <Link href="/RegistrarContactos">
-                            <View style={styles.stackLayout}>
-                                <AntDesign name="contacts" size={60} color="purple" />
-                                <Text style={styles.menuButtonText}>Registrar</Text>
-                                <Text style={styles.menuButtonSubText}>Contactos</Text>
+                        <TouchableOpacity
+                            style={styles.menuButton}
+                        //onPress={() => navigation.navigate("Notifications")}
+                        >
+                            <Link href="/RegistrarContactos">
+                                <View style={styles.stackLayout}>
+                                    <AntDesign name="contacts" size={60} color="purple" />
+                                    <Text style={styles.menuButtonText}>Registrar</Text>
+                                    <Text style={styles.menuButtonSubText}>Contactos</Text>
 
-                            </View>
-                        </Link>
-                    </TouchableOpacity>
+                                </View>
+                            </Link>
+                        </TouchableOpacity>
 
 
                         <TouchableOpacity style={styles.menuButton}>
@@ -111,7 +113,7 @@ export default function Menu() {
 
 
 
-                       
+
 
                         <TouchableOpacity
                             style={styles.menuButton}
