@@ -11,17 +11,14 @@ export default function HomeScreen() {
 
   
   return (
-    <View style={styles.container}>
-      
+    <View style={styles.container}>    
       <TouchableOpacity
         style={styles.sosButton}
       >
             <Link href="/Menu" style={styles.button}>
             <Text style={styles.sosButtonText}>SOS</Text>
-      </Link>
-       
+      </Link>  
       </TouchableOpacity>
-
     </View>
   );
 };
