@@ -62,11 +62,14 @@ export default function Menu() {
                             style={styles.menuButton}
                         //  onPress={() => navigation.navigate("ReportIncident")}
                         >
+                            <Link href="/Reporte">
                             <View style={styles.stackLayout}>
                                 <MaterialIcons name="report" size={60} color="red" />
                                 <Text style={styles.menuButtonText}>Reportar</Text>
                                 <Text style={styles.menuButtonSubText}>Incidente</Text>
                             </View>
+                            </Link>
+                            
                         </TouchableOpacity>
 
 
@@ -110,10 +113,6 @@ export default function Menu() {
                                 </View>
                             </Link>
                         </TouchableOpacity>
-
-
-
-
 
                         <TouchableOpacity
                             style={styles.menuButton}
